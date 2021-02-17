@@ -8,7 +8,7 @@
 export default {
   name: 'App',
   created () {
-    this.$store.dispatch('auth')
+    this.$store.dispatch('fetchProducts')
   }
 }
 </script>

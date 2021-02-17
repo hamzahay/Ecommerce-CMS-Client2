@@ -1,10 +1,15 @@
 <template>
   <div class="product-container">
     <AddForm/>
-    <div class="card-container">
-      <ProductCard/>
-      <ProductCard/>
-      <ProductCard/>
+    <div v-if="products.length === 0" class="empty-list">
+      <h3>Empty List</h3>
+    </div>
+    <div v-else class="card-container">
+      <ProductCard
+        v-for="product in products"
+        :key="product.id"
+        :product="product"
+      />
     </div>
   </div>
 </template>
@@ -23,6 +28,11 @@ export default {
   components: {
     ProductCard,
     AddForm
+  },
+  computed: {
+    products () {
+      return this.$store.state.products
+    }
   }
 }
 </script>
@@ -31,6 +41,11 @@ export default {
   .product-container {
     display: flex;
     height: 580px;
+  }
+
+  .empty-list {
+    display: inline-block;
+    width: 65vw;
   }
 
   .card-container {

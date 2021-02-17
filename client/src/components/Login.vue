@@ -30,7 +30,7 @@ export default {
         .then(() => {
           this.loginData.email = ''
           this.loginData.password = ''
-          this.$router.push({ name: 'Home' })
+          this.$router.push('/')
         })
     }
   }

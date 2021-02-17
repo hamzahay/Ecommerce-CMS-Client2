@@ -1,14 +1,16 @@
 <template>
   <div class="add-form-container">
     <button v-if="addStatus === false" @click="changeStatus" class="add-btn">Add Product</button>
-    <form v-else class="add-form">
-      <h2>Add Product</h2>
-      <input v-model="formData.name" type="text" placeholder="Name Product" required>
-      <input v-model="formData.image_url" type="text" placeholder="Image URL">
-      <input v-model="formData.price" type="number" placeholder="Price" required>
-      <input v-model="formData.stock" type="number" placeholder="Stock" required>
+    <form v-else class="add-form" >
+      <h2 v-if="updateStatus !== true">Add Product</h2>
+      <h2 v-else>Edit Product</h2>
+      <input @input="updateValue" v-model="formData.name" type="text" placeholder="Name Product" required>
+      <input @input="updateValue" v-model="formData.image_url" type="text" placeholder="Image URL">
+      <input @input="updateValue" v-model="formData.price" type="number" placeholder="Price" required>
+      <input @input="updateValue" v-model="formData.stock" type="number" placeholder="Stock" required>
       <div class="btn-container">
-        <button class="submit-btn">Submit</button>
+        <button v-if="updateStatus !== true" @click.prevent="addProduct" class="submit-btn">Submit</button>
+        <button v-else @click.prevent="editProduct" class="submit-btn">Submit</button>
         <a @click="changeStatus" class="cancel-btn">Cancel</a>
       </div>
     </form>
@@ -20,12 +22,6 @@ export default {
   name: 'AddForm',
   data () {
     return {
-      formData: {
-        name: '',
-        image_url: '',
-        price: '',
-        stock: ''
-      }
     }
   },
   methods: {
@@ -35,11 +31,26 @@ export default {
       this.formData.image_url = ''
       this.formData.price = ''
       this.formData.stock = ''
+    },
+    updateValue () {
+      this.$store.commit('updateFormData', this.formData)
+    },
+    addProduct () {
+      this.$store.dispatch('addProduct')
+    },
+    editProduct () {
+      this.$store.dispatch('editProduct')
     }
   },
   computed: {
     addStatus () {
       return this.$store.state.addStatus
+    },
+    updateStatus () {
+      return this.$store.state.updateStatus
+    },
+    formData () {
+      return this.$store.state.formData
     }
   }
 }
@@ -96,6 +107,7 @@ export default {
     color: white;
     cursor: pointer;
     font-size: 16px;
+    margin: 0px;
   }
 
   .submit-btn:hover {
